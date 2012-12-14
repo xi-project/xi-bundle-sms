@@ -65,8 +65,8 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
         $extension = new XiSmsExtension();
         $extension->load(array(array()), $this->container);
 
-        $this->assertTrue($this->container->has('svt_main.sms_gateway.raw'));
-        $this->assertTrue($this->container->has('svt_main.sms_gateway'));
+        $this->assertTrue($this->container->has('xi_sms.sms_gateway.raw'));
+        $this->assertTrue($this->container->has('xi_sms.sms_gateway'));
 
         $this->assertSaneContainer($this->getDumpedContainer());
     }
