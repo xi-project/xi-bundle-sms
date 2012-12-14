@@ -19,7 +19,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('svt_main');
+        $rootNode = $treeBuilder->root('xi_sms');
 
         $rootNode
             ->children()
