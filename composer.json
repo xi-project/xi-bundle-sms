@@ -1,0 +1,32 @@
+{
+    "name": "xi/sms-bundle",
+    "type": "symfony-bundle",
+    "description": "SMS bundle",
+    "keywords": ["SMS"],
+    "homepage": "http://github.com/xi-project/xi-bundle-sms",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Mikko Forsström",
+            "email": "pekkisx@gmail.com",
+            "homepage": "http://diktaattoriporssi.com",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.3",
+        "xi/sms": "<=dev-master",
+        "symfony/framework-bundle": ">=2.1.0,<2.3-dev"
+    },
+
+    "require-dev": {
+    },
+
+    "autoload": {
+        "psr-0": {
+            "Xi\\Bundle\\SmsBundle": ""
+        }
+    },
+    "target-dir": "Xi/Bundle/SmsBundle"
+}
