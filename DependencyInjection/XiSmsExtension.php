@@ -29,7 +29,7 @@ class XiSmsExtension extends Extension
         // $loader->load('services.yml');
 
         $definition = new Definition($config['sms_gateway']['class'], $config['sms_gateway']['arguments']);
-        $container->setDefinition('svt_main.sms_gateway.raw', $definition);
+        $container->setDefinition('xi_sms.sms_gateway.raw', $definition);
 
         $definition = new Definition(
             'Xi\Sms\Gateway\NumberLimitingGateway',
