@@ -34,11 +34,11 @@ class XiSmsExtension extends Extension
         $definition = new Definition(
             'Xi\Sms\Gateway\NumberLimitingGateway',
             array(
-                new Reference('svt_main.sms_gateway.raw'),
+                new Reference('xi_sms.sms_gateway.raw'),
                 $config['sms_gateway']['number_limiter']['whitelist'],
                 $config['sms_gateway']['number_limiter']['blacklist']
             )
         );
-        $container->setDefinition('svt_main.sms_gateway', $definition);
+        $container->setDefinition('xi_sms.sms_gateway', $definition);
     }
 }
