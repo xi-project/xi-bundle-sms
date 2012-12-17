@@ -67,6 +67,7 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->container->has('xi_sms.sms_gateway.raw'));
         $this->assertTrue($this->container->has('xi_sms.sms_gateway'));
+        $this->assertTrue($this->container->has('xi_sms.filter.number_limiter'));
 
         $this->assertSaneContainer($this->getDumpedContainer());
     }
