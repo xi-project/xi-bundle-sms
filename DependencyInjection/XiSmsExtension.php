@@ -25,28 +25,14 @@ class XiSmsExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.yml');
+
         $definition = new Definition($config['sms_gateway']['class'], $config['sms_gateway']['arguments']);
-        $container->setDefinition('xi_sms.sms_gateway.raw', $definition);
+        $container->setDefinition('xi_sms.gateway.raw', $definition);
 
-        $definition = new Definition(
-            'Xi\Sms\Gateway\Filter\NumberLimitingFilter',
-            array(
-                $config['sms_gateway']['number_limiter']['whitelist'],
-                $config['sms_gateway']['number_limiter']['blacklist']
-            )
-        );
-        $container->setDefinition('xi_sms.filter.number_limiter', $definition);
-
-        $definition = new Definition(
-            'Xi\Sms\Gateway\FilterGateway',
-            array(
-                new Reference('xi_sms.sms_gateway.raw'),
-                array(
-                    new Reference('xi_sms.filter.number_limiter')
-                )
-
-            )
-        );
-        $container->setDefinition('xi_sms.sms_gateway', $definition);
+        $numberFilter = $container->getDefinition('xi_sms.filter.number_limiter');
+        $numberFilter->addArgument($config['sms_gateway']['number_limiter']['whitelist']);
+        $numberFilter->addArgument($config['sms_gateway']['number_limiter']['blacklist']);
     }
 }

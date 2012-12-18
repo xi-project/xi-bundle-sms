@@ -1,0 +1,10 @@
+services:
+    xi_sms.gateway:
+        class: Xi\Sms\Gateway\FilterGateway
+        arguments: [ "@xi_sms.gateway.raw" ]
+
+    xi_sms.filter.number_limiter:
+        class: Xi\Sms\Gateway\Filter\NumberLimitingFilter
+        arguments: []
+        tags:
+            -  { name: xi_sms.filter }

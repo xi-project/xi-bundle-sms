@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Scope;
 use Symfony\Component\HttpFoundation\Request;
+use Xi\Bundle\SmsBundle\DependencyInjection\Compiler\FilterPass;
 
 class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,6 +31,9 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
         $this->container->setParameter('kernel.root_dir', __DIR__);
         $this->container->setParameter('kernel.charset', 'UTF-8');
         $this->container->set('kernel', $this->kernel);
+
+        $this->container->addCompilerPass(new FilterPass());
+
     }
 
 
@@ -65,11 +69,11 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
         $extension = new XiSmsExtension();
         $extension->load(array(array()), $this->container);
 
-        $this->assertTrue($this->container->has('xi_sms.sms_gateway.raw'));
-        $this->assertTrue($this->container->has('xi_sms.sms_gateway'));
-        $this->assertTrue($this->container->has('xi_sms.filter.number_limiter'));
-
         $this->assertSaneContainer($this->getDumpedContainer());
+
+        $this->assertTrue($this->container->has('xi_sms.gateway.raw'));
+        $this->assertTrue($this->container->has('xi_sms.gateway'));
+        $this->assertTrue($this->container->has('xi_sms.filter.number_limiter'));
     }
 
     private function getDumpedContainer()
