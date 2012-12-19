@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Scope;
 use Symfony\Component\HttpFoundation\Request;
 use Xi\Bundle\SmsBundle\DependencyInjection\Compiler\FilterPass;
+use Symfony\Component\DependencyInjection\Definition;
 
 class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -61,8 +62,9 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideDebugModes
+     * @test
      */
-    public function testDefaultConfig($debug)
+    public function defaultConfigShouldProvideSaneDefaults($debug)
     {
         $this->container->setParameter('kernel.debug', $debug);
 
@@ -75,6 +77,39 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->container->has('xi_sms.gateway'));
         $this->assertTrue($this->container->has('xi_sms.filter.number_limiter'));
     }
+
+    /**
+     * @test
+     * @dataProvider provideDebugModes
+     */
+    public function gatewayParamsShouldAcceptObjectReferences($debug)
+    {
+        $this->container->setParameter('kernel.debug', $debug);
+
+        $mockClassName = $this->getMockClass('Xi\Sms\Gateway\MockGateway');
+        $lusauttaja = new Definition($mockClassName);
+        $this->container->setDefinition('lusauttaja', $lusauttaja);
+
+        $extension = new XiSmsExtension();
+        $extension->load(
+            array(
+                array(
+                    'sms_gateway' => array(
+                        'service_id' => 'lusauttaja',
+                    ),
+                )
+            ),
+            $this->container
+        );
+
+        $this->assertSaneContainer($this->getDumpedContainer());
+
+        $this->assertTrue($this->container->has('xi_sms.gateway.raw'));
+        $this->assertTrue($this->container->has('xi_sms.gateway'));
+        $this->assertTrue($this->container->has('xi_sms.filter.number_limiter'));
+    }
+
+
 
     private function getDumpedContainer()
     {
