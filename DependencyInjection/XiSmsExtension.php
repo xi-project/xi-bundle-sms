@@ -8,7 +8,6 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Alias;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -28,8 +27,13 @@ class XiSmsExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        $definition = new Definition($config['sms_gateway']['class'], $config['sms_gateway']['arguments']);
-        $container->setDefinition('xi_sms.gateway.raw', $definition);
+        if ($config['sms_gateway']['service_id']) {
+            $alias = new Alias('xi_sms.gateway.raw');
+            $container->setAlias($alias, $config['sms_gateway']['service_id']);
+        } else {
+            $definition = new Definition($config['sms_gateway']['class'], $config['sms_gateway']['arguments']);
+            $container->setDefinition('xi_sms.gateway.raw', $definition);
+        }
 
         $numberFilter = $container->getDefinition('xi_sms.filter.number_limiter');
         $numberFilter->addArgument($config['sms_gateway']['number_limiter']['whitelist']);
