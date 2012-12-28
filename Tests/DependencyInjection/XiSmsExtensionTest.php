@@ -26,6 +26,13 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
         $this->container = new ContainerBuilder();
         $this->container->addScope(new Scope('request'));
         $this->container->register('request', 'Symfony\\Component\\HttpFoundation\\Request')->setScope('request');
+
+        $this->container
+            ->register(
+                'event_dispatcher',
+                $this->getMockClass('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+            );
+
         $this->container->setParameter('kernel.bundles', array());
         $this->container->setParameter('kernel.cache_dir', __DIR__);
         $this->container->setParameter('kernel.debug', false);
@@ -38,7 +45,7 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    static public function assertSaneContainer(Container $container, $message = '')
+    public static function assertSaneContainer(Container $container, $message = '')
     {
         $errors = array();
         foreach ($container->getServiceIds() as $id) {
@@ -62,14 +69,28 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideDebugModes
+     * @group tusso
      * @test
      */
     public function defaultConfigShouldProvideSaneDefaults($debug)
     {
         $this->container->setParameter('kernel.debug', $debug);
 
+        $mockClass = $this->getMockClass('Xi\Sms\Gateway\GatewayInterface');
+        $puuppa = new Definition($mockClass);
+        $this->container->setDefinition('puuppa', $puuppa);
+
         $extension = new XiSmsExtension();
-        $extension->load(array(array()), $this->container);
+        $extension->load(
+            array(
+                array(
+                    'gateway' => array(
+                        'service_id' => 'puuppa',
+                    )
+                )
+            ),
+            $this->container
+        );
 
         $this->assertSaneContainer($this->getDumpedContainer());
 
@@ -82,11 +103,11 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider provideDebugModes
      */
-    public function gatewayParamsShouldAcceptObjectReferences($debug)
+    public function gatewayServiceShouldBeSettable($debug)
     {
         $this->container->setParameter('kernel.debug', $debug);
 
-        $mockClassName = $this->getMockClass('Xi\Sms\Gateway\MockGateway');
+        $mockClassName = $this->getMockClass('Xi\Sms\Gateway\GatewayInterface');
         $lusauttaja = new Definition($mockClassName);
         $this->container->setDefinition('lusauttaja', $lusauttaja);
 
@@ -94,7 +115,7 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
         $extension->load(
             array(
                 array(
-                    'sms_gateway' => array(
+                    'gateway' => array(
                         'service_id' => 'lusauttaja',
                     ),
                 )
@@ -108,8 +129,6 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->container->has('xi_sms.gateway'));
         $this->assertTrue($this->container->has('xi_sms.filter.number_limiter'));
     }
-
-
 
     private function getDumpedContainer()
     {
