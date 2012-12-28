@@ -27,16 +27,11 @@ class XiSmsExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        if ($config['sms_gateway']['service_id']) {
-            $alias = new Alias('xi_sms.gateway.raw');
-            $container->setAlias($alias, $config['sms_gateway']['service_id']);
-        } else {
-            $definition = new Definition($config['sms_gateway']['class'], $config['sms_gateway']['arguments']);
-            $container->setDefinition('xi_sms.gateway.raw', $definition);
-        }
+        $alias = new Alias('xi_sms.gateway.raw');
+        $container->setAlias($alias, $config['gateway']['service_id']);
 
         $numberFilter = $container->getDefinition('xi_sms.filter.number_limiter');
-        $numberFilter->addArgument($config['sms_gateway']['number_limiter']['whitelist']);
-        $numberFilter->addArgument($config['sms_gateway']['number_limiter']['blacklist']);
+        $numberFilter->addArgument($config['number_limiter']['whitelist']);
+        $numberFilter->addArgument($config['number_limiter']['blacklist']);
     }
 }
