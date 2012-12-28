@@ -45,7 +45,7 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    static public function assertSaneContainer(Container $container, $message = '')
+    public static function assertSaneContainer(Container $container, $message = '')
     {
         $errors = array();
         foreach ($container->getServiceIds() as $id) {
