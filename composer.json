@@ -13,14 +13,15 @@
             "role": "Developer"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "php": ">=5.3.3",
-        "xi/sms": "<=dev-master",
+        "xi/sms": "<=dev-master@dev",
         "symfony/framework-bundle": ">=2.1.0,<2.3-dev"
     },
 
     "require-dev": {
+    	"symfony/console": "2.2.*"
     },
 
     "autoload": {
