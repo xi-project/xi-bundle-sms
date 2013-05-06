@@ -1,4 +1,6 @@
 Xi SMS bundle
 ==============
 
-Sms bundle for Symfony 2.1+
+SMS sending for Symfony 2.1 (via Xi SMS library).
+
+Pull / feature requests are welcome!
