@@ -41,7 +41,6 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
         $this->container->set('kernel', $this->kernel);
 
         $this->container->addCompilerPass(new FilterPass());
-
     }
 
 
@@ -94,7 +93,7 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSaneContainer($this->getDumpedContainer());
 
-        $this->assertTrue($this->container->has('xi_sms.gateway.raw'));
+        $this->assertTrue($this->container->has('xi_sms.gateway.inner'));
         $this->assertTrue($this->container->has('xi_sms.gateway'));
         $this->assertTrue($this->container->has('xi_sms.filter.number_limiter'));
     }
@@ -125,7 +124,7 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSaneContainer($this->getDumpedContainer());
 
-        $this->assertTrue($this->container->has('xi_sms.gateway.raw'));
+        $this->assertTrue($this->container->has('xi_sms.gateway.inner'));
         $this->assertTrue($this->container->has('xi_sms.gateway'));
         $this->assertTrue($this->container->has('xi_sms.filter.number_limiter'));
     }

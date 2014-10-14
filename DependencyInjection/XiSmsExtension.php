@@ -27,7 +27,7 @@ class XiSmsExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        $alias = new Alias('xi_sms.gateway.raw');
+        $alias = new Alias('xi_sms.gateway.inner');
         $container->setAlias($alias, $config['gateway']['service_id']);
 
         $numberFilter = $container->getDefinition('xi_sms.filter.number_limiter');

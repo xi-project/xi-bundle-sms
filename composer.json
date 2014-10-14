@@ -16,12 +16,13 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.3.3",
-        "xi/sms": "<=dev-master@dev",
-        "symfony/framework-bundle": ">=2.1.0,<2.5"
+        "xi/sms": "0.2.*",
+        "symfony/framework-bundle": "~2.1"
     },
 
     "require-dev": {
-    	"symfony/console": "2.2.*"
+    	"symfony/console": "~2.2",
+        "phpunit/phpunit": "~4.0"
     },
 
     "autoload": {
