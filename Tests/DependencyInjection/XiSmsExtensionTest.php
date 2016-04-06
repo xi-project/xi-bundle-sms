@@ -24,8 +24,7 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $this->kernel = $this->getMock('Symfony\\Component\\HttpKernel\\KernelInterface');
         $this->container = new ContainerBuilder();
-        $this->container->addScope(new Scope('request'));
-        $this->container->register('request', 'Symfony\\Component\\HttpFoundation\\Request')->setScope('request');
+        $this->container->register('request', 'Symfony\\Component\\HttpFoundation\\Request');
 
         $this->container
             ->register(
@@ -140,7 +139,6 @@ class XiSmsExtensionTest extends \PHPUnit_Framework_TestCase
         eval('?>'.$dumper->dump(array('class' => $class)));
 
         $container = new $class();
-        $container->enterScope('request');
         $container->set('request', Request::create('/'));
         $container->set('kernel', $this->kernel);
 
